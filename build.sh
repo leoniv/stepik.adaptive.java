@@ -1,5 +1,5 @@
 #!/bin/sh
 
-JAVAC="javac -d ./bin -cp ./bin -g $* ./src/org/hello/java/*.java"
+JAVAC="javac -d ./build -cp ./build -g $* ./src/org/hello/java/*.java"
 
 exec $JAVAC

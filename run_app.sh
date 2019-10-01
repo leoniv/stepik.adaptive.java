@@ -1,5 +1,5 @@
 #!/bin/sh
 
-JAVA="java -cp ./bin org.hello.java.App"
+JAVA="java -cp ./build org.hello.java.App"
 
 exec $JAVA
