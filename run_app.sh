@@ -1,5 +1,5 @@
 #!/bin/sh
 
-JAVA="java -cp ./build stepik.adaptive.Main"
+JAVA="java -cp ./build/classes/java stepik.adaptive.Main"
 
 exec $JAVA
