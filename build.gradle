@@ -1,18 +1,7 @@
-import com.github.jrubygradle.JRubyExec
-
-buildscript {
-    repositories { jcenter() }
-
-    dependencies {
-        classpath "com.github.jruby-gradle:jruby-gradle-plugin:[1.1.2,1.2)"
-    }
-}
-
 plugins {
   id 'java'
   id 'application'
 }
-apply plugin: "com.github.jruby-gradle.base"
 
 repositories {
   jcenter()
@@ -20,14 +9,9 @@ repositories {
 
 dependencies {
   testImplementation 'junit:junit:4.12'
-  gems 'rubygems:pry:0.12'
 }
 
 application {
   mainClassName = "stepik.adaptive.Main"
 }
 
-task helloJRuby(type: JRubyExec) {
-  script 'rake'
- // scriptArgs '--version'
-}
