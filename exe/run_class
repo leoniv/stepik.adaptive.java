@@ -1,0 +1,6 @@
+#!/bin/sh
+package="stepik.adaptive"
+project_path="$(dirname $0)/.."
+java="java -cp $project_path/build/classes/java/main $package.$1"
+
+exec $java
