@@ -16,7 +16,13 @@ public class IoReader {
 
   public static <T> List<T> scanBy(InputStream in, Function<Scanner, ? extends T> scanFunction) {
     List<T> result =  new ArrayList<>();
-
+    Scanner scanner = new Scanner(in);
+    while (scanner.hasNext()) {
+      T scanned = scanFunction.apply(scanner);
+      if (scanned != null) {
+        result.add(scanned);
+      }
+    }
     return result;
   }
 }
