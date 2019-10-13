@@ -1,0 +1,7 @@
+#!/bin/env bash
+
+servername=$1
+openssl="openssl s_client -servername $servername -connect $servername:443"
+
+echo | $openssl 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'
+
