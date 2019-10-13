@@ -25,4 +25,15 @@ public class IoReader {
     }
     return result;
   }
+
+  public static Function<Scanner, Integer> scanIntegerFunction() {
+     return s -> {
+        if (s.hasNextInt()) {
+          return Integer.valueOf(s.nextInt());
+        } else {
+          s.next();
+         };
+        return null;
+      };
+  }
 }
