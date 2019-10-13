@@ -36,4 +36,21 @@ public class IoReader {
         return null;
       };
   }
+
+  public static Function<Scanner, Double> scanDoubleFunction() {
+     return s -> {
+        if (s.hasNextDouble()) {
+          return Double.valueOf(s.nextDouble());
+        } else {
+          s.next();
+         };
+        return null;
+      };
+  }
+
+  public static Function<Scanner, String> scanWordsFunction() {
+     return s -> {
+       return s.next();
+     };
+  }
 }
