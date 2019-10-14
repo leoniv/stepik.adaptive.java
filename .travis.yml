@@ -13,6 +13,6 @@ before_script:
 
 script:
   - ./gradlew check
-  - ./exe/jrspec
-  - ./exe/cucumber --format summary
+  - ./exe/jrspec --format progress
+  - ./exe/jcucumber --format summary
 
