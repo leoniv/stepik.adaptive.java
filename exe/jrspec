@@ -1,0 +1,5 @@
+#!/bin/env sh
+
+. $(dirname $0)/jruby_env.sh
+
+$gradlew classes && jruby -S bundle exec rspec $@

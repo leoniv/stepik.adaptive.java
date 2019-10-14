@@ -4,13 +4,15 @@ jdk:
   - openjdk9
 
 os:
-  - linux
+  - linux`
 
 before_script:
-  - ruby -v
-  - bundle install
+  - rvm install jruby-9.2.6
+  - rvm use jruby
+  - ./exe/jbundle install
 
 script:
-  - bundle exec cucumber --format summary
   - ./gradlew check
+  - ./exe/jrake
+  - ./exe/cucumber
 
