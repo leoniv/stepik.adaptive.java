@@ -6,9 +6,6 @@ jdk:
 os:
   - linux
 
-rvm:
-  - jruby
-
 before_script:
   - ruby -v
   - bundle install
