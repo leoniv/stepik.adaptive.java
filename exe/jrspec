@@ -1,4 +1,4 @@
-#!/bin/env sh
+#!/bin/sh
 
 . $(dirname $0)/jruby_env.sh
 

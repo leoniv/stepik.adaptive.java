@@ -4,7 +4,7 @@ jdk:
   - openjdk9
 
 os:
-  - linux`
+  - linux
 
 before_script:
   - rvm install jruby-9.2.6
@@ -13,6 +13,6 @@ before_script:
 
 script:
   - ./gradlew check
-  - ./exe/jrake
-  - ./exe/cucumber
+  - ./exe/jrspec
+  - ./exe/cucumber --format summary
 
