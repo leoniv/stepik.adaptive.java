@@ -1,4 +1,4 @@
-Feature: Class Chocolate
+Feature: Class chocolate.Main
   A chocolate bar has a shape of rectangle, divided into NxM segments.
   You can break down this chocolate bar into two parts by a single straight
   line (only once). Find whether you can break off exactly K segments from the
@@ -9,7 +9,7 @@ Feature: Class Chocolate
   The program must output one of the two words: YES or NO
 
   Scenario: YES answer
-    When I run `run_class lesson.Chocolate` interactively
+    When I run `run_class lesson.chocolate.Main` interactively
     And I type "4"
     And I type "2"
     And I type "6"
@@ -21,10 +21,22 @@ Feature: Class Chocolate
     And the exit status should be 0
 
   Scenario: NO answer
-    When I run `run_class lesson.Chocolate` interactively
+    When I run `run_class lesson.chocolate.Main` interactively
     And I type "2"
     And I type "10"
     And I type "7"
+    And I close the stdin stream
+    Then the output should contain:
+    """
+    NO
+    """
+    And the exit status should be 0
+
+  Scenario: NO answer
+    When I run `run_class lesson.chocolate.Main` interactively
+    And I type "3"
+    And I type "4"
+    And I type "15"
     And I close the stdin stream
     Then the output should contain:
     """
