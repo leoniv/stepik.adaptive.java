@@ -53,4 +53,13 @@ public class IoReader {
        return s.next();
      };
   }
+
+  public static Function<Scanner, String> scanLinesFunction() {
+    return s -> {
+      if (s.hasNextLine()) {
+        return s.nextLine();
+      };
+      return null;
+    };
+  }
 }
