@@ -1,9 +1,9 @@
-package stepik.adaptive.lesson.chocolate;
+package stepik.adaptive.lesson;
 
 import stepik.adaptive.util.IoReader;
 import java.util.List;
 
-public class Main {
+public class Chocolate {
   public static void main(String[] argv) {
     final String YES = "YES";
     final String NO = "NO";

@@ -1,8 +1,8 @@
-package stepik.adaptive.lesson.spell_checker;
+package stepik.adaptive.lesson;
 
 import java.util.List;
 
-public class Main {
+public class SpellChecker {
   public static void main(String[] argv) {
 
   }

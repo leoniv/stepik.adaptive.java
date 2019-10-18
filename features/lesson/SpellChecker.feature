@@ -1,11 +1,11 @@
-Feature: Class spell_checker.Main
+Feature: Class SpellChecker
   A simple spell checker which gets all its data from stdin.
   The first line of the input contains d – number of records in the list of
   known word. Next go d lines contain one known word per line, next — the
   number l of lines of the text, after which — l lines of the text.
 
   Scenario: Spell checker puts erroneous words to stdout
-    When I run `run_class lesson.spell_checker.Main` interactively
+    When I run `run_class lesson.SpellChecker` interactively
     And I type "3"
     And I type "a"
     And I type "bb"
@@ -24,7 +24,7 @@ Feature: Class spell_checker.Main
     And the exit status should be 0
 
   Scenario: Spell checker puts nothing when no errors found
-    When I run `run_class lesson.spell_checker.Main` interactively
+    When I run `run_class lesson.SpellChecker` interactively
     And I type "3"
     And I type "a"
     And I type "bb"
