@@ -12,7 +12,7 @@ Feature: Class SpellChecker
     And I type "cCc"
     And I type "2"
     And I type "a bb aab aba ccc"
-    And I type "c bb aaa"
+    And I type "c bb aaa aab"
     And I close the stdin stream
     Then the output should contain:
     """

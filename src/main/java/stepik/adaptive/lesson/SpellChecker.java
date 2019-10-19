@@ -13,7 +13,7 @@ public class SpellChecker {
     Input input = Input.parse(System.in);
     input.lines.stream().flatMap(
           line -> new Checker(input.knownWords).spell(line).stream()
-          ).sorted().forEach(s -> System.out.println(s));
+          ).sorted().distinct().forEach(s -> System.out.println(s));
   }
 
   static class Input {
