@@ -26,6 +26,12 @@ public class IoReader {
     return result;
   }
 
+  public static <T> Function<InputStream, List<T>> scannerFor(Function<Scanner, T> scanFunction) {
+    return in -> {
+      return scanBy(in, scanFunction);
+    };
+  }
+
   public static Function<Scanner, Integer> scanIntegerFunction() {
      return s -> {
         if (s.hasNextInt()) {
