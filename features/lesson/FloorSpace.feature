@@ -14,7 +14,7 @@ Feature: Class FloorSpace
     And I type "<b>"
     And I type "<c>"
     And I close the stdin stream
-    Then the output should contain "<output>"
+    Then the output should match /<output>/
     And the exit status should be 0
 
     Examples:
