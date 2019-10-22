@@ -14,7 +14,11 @@ public class FloorSpace {
     List<String>input = IoReader.scannerFor(IoReader.scanWordsFunction()).apply(System.in);
     Shape.Builder shapeBuilder = new Shape.Builder(input.remove(0));
     input.stream().forEach(it -> shapeBuilder.add(it));
-    System.out.printf("%.1f", shapeBuilder.build().area());
+    printArea(shapeBuilder.build());
+  }
+
+  static void printArea(Area shape) {
+    System.out.println(shape.area());
   }
 
   interface Area {
