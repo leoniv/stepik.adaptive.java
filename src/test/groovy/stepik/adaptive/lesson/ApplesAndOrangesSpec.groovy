@@ -15,8 +15,10 @@ class ApplesAndOrangesSpec extends Specification {
   }
 
   def "Illegal Apple.compareTo(Orange other)"() {
-    expect:
-      assert new Apple(100).compareTo(new Orange(100)) == 0
-  }
+    when: "I run illegal comparsation"
+      new Apple(100).compareTo(new Orange(100)) == 0
 
+    then: "Eexception will thrown"
+      thrown java.lang.ClassCastException
+  }
 }

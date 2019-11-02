@@ -1,9 +1,8 @@
 package stepik.adaptive.lesson;
 
-@SuppressWarnings("unchecked")
 abstract class Fruit<T extends Fruit> implements Comparable<T> {
 
-  private final int weigth;
+  protected final int weigth;
 
   public Fruit(int weight) {
     this.weigth = weight;
@@ -13,9 +12,8 @@ abstract class Fruit<T extends Fruit> implements Comparable<T> {
     return this.weigth;
   }
 
-  @SuppressWarnings("unchecked")
   public int compareTo(T other) {
-    return Integer.compare(this.weigth, ((Fruit<T>) other).weigth);
+    return Integer.compare(this.weigth, other.weigth);
   }
 }
 
@@ -36,6 +34,8 @@ class Orange extends Fruit<Orange> {
 
 class Test {
   void test() {
-   new Apple(10).compareTo(new Orange(0));
+    Fruit fruitApple = new Apple(30);
+    Fruit fruitOrange = new Orange(40);
+    fruitApple.compareTo(fruitOrange);
   }
 }
