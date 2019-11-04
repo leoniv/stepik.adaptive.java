@@ -14,11 +14,11 @@ class ApplesAndOrangesSpec extends Specification {
       assert new Orange(100).compareTo(new Orange(100)) == 0
   }
 
-  def "Illegal Apple.compareTo(Orange other)"() {
+  def "The illegal invocation Apple.compareTo(Orange other) is working with groovy"() {
     when: "I run illegal comparsation"
-      new Apple(100).compareTo(new Orange(100)) == 0
+      def result = new Apple(100).compareTo(new Orange(100)) == 0
 
-    then: "Eexception will thrown"
-      thrown java.lang.ClassCastException
+    then: "But groovy can cast Oranges to Apples ;)"
+      assert result
   }
 }
