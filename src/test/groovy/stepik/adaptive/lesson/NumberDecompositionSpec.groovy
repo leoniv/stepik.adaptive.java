@@ -46,12 +46,12 @@ class NumberDecompositionSpec extends Specification {
 
   static class HelpersSpec extends NumberDecompositionSpec {
 
-    def "Helper #sum"() {
+    def "#sum"() {
       expect:
         assert generator(0).sum((int[])[1,2,3,4,5,6], 3) == 15
     }
 
-    def "Helper #distributeSum"() {
+    def "#distributeSum"() {
        expect:
          assert generator(0).distributeSum(sum, from, array) == outArray
 
