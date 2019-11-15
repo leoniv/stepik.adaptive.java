@@ -54,5 +54,20 @@ public class NumberDecomposition {
 
       return result;
     }
+
+    private int sum(int[] arr, int from) {
+      return IntStream.of(arr).skip((long) from).sum();
+    }
+
+    private int[] distributeSum(int sum, int from, int[] arr) {
+      for (int i = from; i < arr.length; i++) {
+        if (sum-- > 0) {
+          arr[i] = 1;
+        } else {
+          arr[i] = 0;
+        }
+      }
+      return arr;
+    }
   }
 }
