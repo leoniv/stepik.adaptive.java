@@ -4,42 +4,55 @@ import java.lang.IllegalArgumentException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class NumberDecomposition {
 
   public static void main(String[] argv) {
     try (Scanner scanner = new Scanner(System.in)) {
-      System.out.println(new Algorithm(scanner.nextInt()));
+      Generator generator = new Generator(scanner.nextInt());
+      while (generator.hasNext()) {
+        System.out.println(
+          IntStream.of(generator.next())
+            .filter(X -> X > 0)
+            .mapToObj(Integer::toString)
+            .collect(Collectors.joining(" "))
+        );
+      }
     }
   }
 
   /**
-   * This algorithm generates all decomposition natural number n
+   * This algorithm generates, one by one, all decomposition natural number
    * into the whole positive addends in a lexicographical order
-   * */
-  static class Algorithm {
-    public final int n;
+   */
+  static class Generator {
+    public final int Number;
+    private int[] nextSeq;
 
-    public Algorithm(int n) {
-      if (n < 0 || n > 40) {
-        throw new IllegalArgumentException(Integer.toString(n));
+    public Generator(int number) {
+      if (number < 0 || number > 40) {
+        throw new IllegalArgumentException("" + number);
       }
-      this.n = n;
+      Number = number;
+      nextSeq = IntStream.generate(() -> 1).limit((long) number).toArray();
     }
 
-    public int[][] run() {
-      return null;
+    public boolean hasNext() {
+      return nextSeq != null;
     }
 
-    @Override
-    public String toString() {
-      return Stream.of(run()).map(
-           arr -> IntStream.of(arr)
-                    .filter(x -> x > 0)
-                    .mapToObj(Integer::toString)
-                    .collect(Collectors.joining(" "))
-          ).collect(Collectors.joining("\n"));
+    public int[] next() {
+      int[] result = nextSeq;
+      nextSeq = nextSeqGenerate(result);
+      return result;
+    }
+
+    int[] nextSeqGenerate(int[] prevSeq) {
+      if (prevSeq.length == 0 || prevSeq[0] == Number) { return null; }
+
+      int[] result = new int[Number];
+
+      return result;
     }
   }
 }
