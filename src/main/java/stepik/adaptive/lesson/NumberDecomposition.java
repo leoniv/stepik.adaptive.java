@@ -1,6 +1,7 @@
 package stepik.adaptive.lesson;
 
 import java.lang.IllegalArgumentException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -8,16 +9,28 @@ import java.util.stream.IntStream;
 public class NumberDecomposition {
 
   public static void main(String[] argv) {
+    int number;
+
+    if (argv.length == 0) {
+      number = getsInteractiveInput();
+    } else {
+      number = Integer.valueOf(argv[0]).intValue();
+    }
+
+    Generator generator = new Generator(number);
+    while (generator.hasNext()) {
+      System.out.println(
+        IntStream.of(generator.next())
+          .filter(X -> X > 0)
+          .mapToObj(Integer::toString)
+          .collect(Collectors.joining(" "))
+      );
+    }
+  }
+
+  static int getsInteractiveInput() {
     try (Scanner scanner = new Scanner(System.in)) {
-      Generator generator = new Generator(scanner.nextInt());
-      while (generator.hasNext()) {
-        System.out.println(
-          IntStream.of(generator.next())
-            .filter(X -> X > 0)
-            .mapToObj(Integer::toString)
-            .collect(Collectors.joining(" "))
-        );
-      }
+      return scanner.nextInt();
     }
   }
 
@@ -28,6 +41,7 @@ public class NumberDecomposition {
   static class Generator {
     public final int Number;
     private int[] nextSeq;
+    private int currentIndex = 0;
 
     public Generator(int number) {
       if (number < 0 || number > 40) {
@@ -43,19 +57,24 @@ public class NumberDecomposition {
 
     public int[] next() {
       int[] result = nextSeq;
-      nextSeq = nextSeqGenerate(result);
+      nextSeq = nextSeqGenerate(Arrays.copyOf(nextSeq, Number));
       return result;
     }
+
 
     int[] nextSeqGenerate(int[] prevSeq) {
       if (prevSeq.length == 0 || prevSeq[0] == Number) { return null; }
 
-      int[] result = new int[Number];
+      if (sum(prevSeq, currentIndex + 1) == 0) { currentIndex = 0; }
 
-      return result;
+      prevSeq[currentIndex] += 1;
+      currentIndex++;
+      distributeSum(sum(prevSeq, currentIndex) - 1, currentIndex, prevSeq);
+      return prevSeq;
     }
 
     private int sum(int[] arr, int from) {
+      if (from > arr.length - 1) { return 0; }
       return IntStream.of(arr).skip((long) from).sum();
     }
 

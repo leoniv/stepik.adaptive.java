@@ -49,6 +49,7 @@ class NumberDecompositionSpec extends Specification {
     def "#sum"() {
       expect:
         assert generator(0).sum((int[])[1,2,3,4,5,6], 3) == 15
+        assert generator(0).sum((int[])[], 0) == 0
     }
 
     def "#distributeSum"() {
