@@ -44,15 +44,15 @@ public class NumberDecomposition {
   static class LexicographicalOrder {
     public final int Number;
     private int[] nextWord;
-    private int index;
+    private int currentIndex;
 
     public LexicographicalOrder(int number) {
-      if (number < 1 || number > 40) {
+      if (number < 1) {
         throw new IllegalArgumentException("" + number);
       }
       Number = number;
       nextWord = distributeSum(Number, 0, new int[Number]);
-      index = 0;
+      currentIndex = 0;
     }
 
     public boolean hasNextWord() {
@@ -68,25 +68,20 @@ public class NumberDecomposition {
     int[] nextWordGenerate(int[] prevWord) {
       if (isLastWord(prevWord)) { return null; }
 
-      if (isRightBound(prevWord, index)) {
-        index = findLeftBound(prevWord, index - 1);
-      }
+      currentIndex = findLeftBound(prevWord, findRightBound(prevWord, currentIndex) - 1);
+      prevWord[currentIndex] += 1;
 
-      prevWord[index] += 1;
-      distributeSum(sum(prevWord, index + 1) - 1, index + 1, prevWord);
-
-      if (isRightBound(prevWord, index)) {
-        index  = findLeftBound(prevWord, index - 1);
-      } else {
-        index++;
-      }
-
-      return prevWord;
+      return distributeSum(sum(prevWord, currentIndex + 1) - 1, currentIndex + 1, prevWord);
     }
 
-    int findLeftBound(int[] word, int index) {
-      while (! isLeftBound(word, index)) { --index; }
-      return index;
+    int findRightBound(int[] word, int fromIndex) {
+      while (! isRightBound(word, fromIndex)) { ++fromIndex; }
+      return fromIndex;
+    }
+
+    int findLeftBound(int[] word, int fromIndex) {
+      while (! isLeftBound(word, fromIndex)) { --fromIndex; }
+      return fromIndex;
     }
 
     boolean isLeftBound(int[] word, int index) {
@@ -101,20 +96,20 @@ public class NumberDecomposition {
       return word[0] == Number;
     }
 
-    private int sum(int[] arr, int from) {
-      if (from > arr.length - 1) { return 0; }
-      return IntStream.of(arr).skip((long) from).sum();
+    private int sum(int[] word, int fromIndex) {
+      if (fromIndex > word.length - 1) { return 0; }
+      return IntStream.of(word).skip((long) fromIndex).sum();
     }
 
-    private int[] distributeSum(int sum, int from, int[] arr) {
-      for (int i = from; i < arr.length; i++) {
+    private int[] distributeSum(int sum, int fromIndex, int[] word) {
+      for (int i = fromIndex; i < word.length; i++) {
         if (sum-- > 0) {
-          arr[i] = 1;
+          word[i] = 1;
         } else {
-          arr[i] = 0;
+          word[i] = 0;
         }
       }
-      return arr;
+      return word;
     }
   }
 }
