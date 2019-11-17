@@ -37,7 +37,7 @@ public class NumberDecomposition {
   /*
    * This algorithm generates, one by one, all words length N
    * on the {0, 1, 2, .. N} alphabet in lexicographical order
-   * which are have summ to equal natural number N
+   * which have summ to equal natural number N
    *
    * Inspired by http://fit.nsu.ru/data_/courses/niu/daio_komb_alg_uchpos.pdf
    */
