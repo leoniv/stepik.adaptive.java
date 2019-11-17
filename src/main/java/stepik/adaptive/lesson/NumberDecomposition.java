@@ -17,10 +17,10 @@ public class NumberDecomposition {
       number = Integer.valueOf(argv[0]).intValue();
     }
 
-    Generator generator = new Generator(number);
-    while (generator.hasNext()) {
+    LexicographicalOrder generator = new LexicographicalOrder(number);
+    while (generator.hasNextWord()) {
       System.out.println(
-        IntStream.of(generator.next())
+        IntStream.of(generator.nextWord())
           .filter(X -> X > 0)
           .mapToObj(Integer::toString)
           .collect(Collectors.joining(" "))
@@ -34,43 +34,49 @@ public class NumberDecomposition {
     }
   }
 
-  /**
-   * This algorithm generates, one by one, all decomposition natural number
-   * into the whole positive addends in a lexicographical order
+  /*
+   * This algorithm generates, one by one, all words length N
+   * on the {0, 1, 2, .. N} alphabet in lexicographical order
+   * which are have summ to equal natural number N
+   *
+   * Inspired by http://fit.nsu.ru/data_/courses/niu/daio_komb_alg_uchpos.pdf
    */
-  static class Generator {
+  static class LexicographicalOrder {
     public final int Number;
-    private int[] nextSeq;
+    private int[] nextWord;
     private int currentIndex = 0;
 
-    public Generator(int number) {
+    public LexicographicalOrder(int number) {
       if (number < 0 || number > 40) {
         throw new IllegalArgumentException("" + number);
       }
       Number = number;
-      nextSeq = IntStream.generate(() -> 1).limit((long) number).toArray();
+      nextWord = IntStream.generate(() -> 1).limit((long) number).toArray();
     }
 
-    public boolean hasNext() {
-      return nextSeq != null;
+    public boolean hasNextWord() {
+      return nextWord != null;
     }
 
-    public int[] next() {
-      int[] result = nextSeq;
-      nextSeq = nextSeqGenerate(Arrays.copyOf(nextSeq, Number));
+    public int[] nextWord() {
+      int[] result = nextWord;
+      nextWord = nextWordGenerate(Arrays.copyOf(nextWord, Number));
       return result;
     }
 
+    int[] nextWordGenerate(int[] prevWord) {
+      if (prevWord.length == 0 || isLastWord(prevWord) ) { return null; }
 
-    int[] nextSeqGenerate(int[] prevSeq) {
-      if (prevSeq.length == 0 || prevSeq[0] == Number) { return null; }
+      if (sum(prevWord, currentIndex + 1) == 0) { currentIndex = 0; }
 
-      if (sum(prevSeq, currentIndex + 1) == 0) { currentIndex = 0; }
-
-      prevSeq[currentIndex] += 1;
+      prevWord[currentIndex] += 1;
       currentIndex++;
-      distributeSum(sum(prevSeq, currentIndex) - 1, currentIndex, prevSeq);
-      return prevSeq;
+      distributeSum(sum(prevWord, currentIndex) - 1, currentIndex, prevWord);
+      return prevWord;
+    }
+
+    boolean isLastWord(int[] word) {
+      return word[0] == Number;
     }
 
     private int sum(int[] arr, int from) {

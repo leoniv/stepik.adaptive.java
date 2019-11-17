@@ -5,7 +5,7 @@ import spock.lang.Specification
 class NumberDecompositionSpec extends Specification {
 
   static def generator(n) {
-    new NumberDecomposition.Generator(n)
+    new NumberDecomposition.LexicographicalOrder(n)
   }
 
   static class InterfaceSpec extends NumberDecompositionSpec {
@@ -14,13 +14,13 @@ class NumberDecompositionSpec extends Specification {
         def generator = generator(0)
 
       and:
-        assert generator.hasNext() == true
+        assert generator.hasNextWord() == true
 
       when: "it should returns empty array"
-        assert generator.next() == []
+        assert generator.nextWord() == []
 
       then:
-        assert generator.hasNext() == false
+        assert generator.hasNextWord() == false
     }
 
     def "When Number == 5"() {
@@ -38,8 +38,8 @@ class NumberDecompositionSpec extends Specification {
 
       expect:
         expected.each {expectNext ->
-          assert generator.hasNext() == true
-          assert generator.next() == expectNext
+          assert generator.hasNextWord() == true
+          assert generator.nextWord() == expectNext
         }
     }
   }
@@ -57,8 +57,8 @@ class NumberDecompositionSpec extends Specification {
          assert generator(0).distributeSum(sum, from, array) == outArray
 
        where:
-        sum | from | array       | outArray
-        3   | 1    | (int[]) [9,9,9,9] | [9,1,1,1]
+        sum | from | array               | outArray
+        3   | 1    | (int[]) [9,9,9,9]   | [9,1,1,1]
         3   | 0    | (int[]) [9,9,9,9,9] | [1,1,1,0,0]
     }
   }
