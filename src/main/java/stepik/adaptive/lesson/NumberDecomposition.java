@@ -44,14 +44,15 @@ public class NumberDecomposition {
   static class LexicographicalOrder {
     public final int Number;
     private int[] nextWord;
-    private int currentIndex = 0;
+    private int index;
 
     public LexicographicalOrder(int number) {
-      if (number < 0 || number > 40) {
+      if (number < 1 || number > 40) {
         throw new IllegalArgumentException("" + number);
       }
       Number = number;
-      nextWord = IntStream.generate(() -> 1).limit((long) number).toArray();
+      nextWord = distributeSum(Number, 0, new int[Number]);
+      index = 0;
     }
 
     public boolean hasNextWord() {
@@ -65,14 +66,35 @@ public class NumberDecomposition {
     }
 
     int[] nextWordGenerate(int[] prevWord) {
-      if (prevWord.length == 0 || isLastWord(prevWord) ) { return null; }
+      if (isLastWord(prevWord)) { return null; }
 
-      if (sum(prevWord, currentIndex + 1) == 0) { currentIndex = 0; }
+      if (isRightBound(prevWord, index)) {
+        index = findLeftBound(prevWord, index - 1);
+      }
 
-      prevWord[currentIndex] += 1;
-      currentIndex++;
-      distributeSum(sum(prevWord, currentIndex) - 1, currentIndex, prevWord);
+      prevWord[index] += 1;
+      distributeSum(sum(prevWord, index + 1) - 1, index + 1, prevWord);
+
+      if (isRightBound(prevWord, index)) {
+        index  = findLeftBound(prevWord, index - 1);
+      } else {
+        index++;
+      }
+
       return prevWord;
+    }
+
+    int findLeftBound(int[] word, int index) {
+      while (! isLeftBound(word, index)) { --index; }
+      return index;
+    }
+
+    boolean isLeftBound(int[] word, int index) {
+      return index <= 0 || word[index - 1] > word[index];
+    }
+
+    boolean isRightBound(int[] word, int index) {
+      return index == word.length - 1 || word[index + 1] == 0;
     }
 
     boolean isLastWord(int[] word) {
