@@ -70,11 +70,11 @@ class DerivativeOfPolinomialSpec extends Specification {
         where:
           coef | pow | derivative
            4   | 1   | "4"
-           4   | -1  | "-4"
+           4   | -1  | "-4*x^-2"
            -4  | 1   | "-4"
            4   | 0   | "0"
            3   | 4   | "12*x^3"
-           3   | -4  | "12*x^-5"
+           3   | -4  | "-12*x^-5"
       }
 
       def "#isZero"() {
