@@ -99,14 +99,31 @@ class DerivativeOfPolinomialSpec extends Specification {
         then:
           sum.coefficient == coef
         and:
-          sum.name == "x"
-        and:
           sum.power == pow
+        and:
+          sum.toString() == asString
 
         where:
-          coef1 | coef2 | pow | coef
-           2    | -3   | 1 | 1
-           2    | -3   | 0 | 1
+          coef1 | coef2 | pow | coef | asString
+           2    | -3    | 2   | -1   |  "-x^2"
+           -2   | 5     | 0   | 3    |  "3"
+      }
+
+      def "#sum must fail"() {
+        given:
+          def p1 = member(10, name1, pow1)
+          def p2 = member(20, name2, pow2)
+
+        when:
+          p1.sum(p2)
+
+        then:
+          thrown IllegalArgumentException
+
+        where:
+          name1 | pow1 | name2 | pow2
+          "x"   |  1   |  "x"  |  2
+          "y"   |  2   |  "x"  |  2
       }
 
       def "#toString"() {

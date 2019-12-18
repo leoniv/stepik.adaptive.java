@@ -105,7 +105,7 @@ class  DerivativeOfPolinomial {
       protected abstract Member sumInner(Member other);
 
       private void validate(Member other) {
-        if (signature() != other.signature()) {
+        if (! signature().equals(other.signature())) {
           throw new IllegalArgumentException(
               signature() + " uncompatable with " + other.signature()
               );
