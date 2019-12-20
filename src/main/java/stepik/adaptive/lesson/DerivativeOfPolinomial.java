@@ -2,8 +2,11 @@ package stepik.adaptive.lesson;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Optional;
 
 class  DerivativeOfPolinomial {
   public static void main(String[] args) {
@@ -41,6 +44,12 @@ class  DerivativeOfPolinomial {
                   );
     }
 
+    static class ParseError extends RuntimeException {
+      public ParseError(String message) {
+        super(message);
+      }
+    }
+
     static abstract class Member {
       final Integer power;
       final String name;
@@ -54,30 +63,42 @@ class  DerivativeOfPolinomial {
 
       static class Parser {
         final String input;
+        final Matcher matcher;
+        final String EXPR = "^(-|\\+)?(\\d+)?(\\*)?([a-zA-Z]+)?(\\^(-?\\d+))?$";
 
         Parser(String input) {
-          this.input = input;
+          this.input = input.replaceAll("\\s+", "");
+          this.matcher = Pattern.compile(EXPR).matcher(input);
+          if (!matcher.find()) { throw new ParseError(input); }
         }
 
         Member parse() {
           return Member.newMember(coefficient(), name(), power());
         }
 
+        Optional<String> match(int group) {
+          return Optional.ofNullable(matcher.group(group));
+        }
+
+        Integer sign() {
+          return Integer.valueOf(match(1).orElse("") + "1");
+        }
+
         Integer coefficient() {
-          return 0; //FIXME
+          return sign() * Integer.valueOf(match(2).orElse("1"));
         }
 
         Integer power() {
-          return 0; //FIXME
+          return Integer.valueOf(match(6).orElse("1"));
         }
 
         String name() {
-          return null; //FIXME
+          return match(4).orElse("");
         }
       }
 
       public static Member newMember(Integer coefficient,String name, Integer power) {
-        if (power == 0) { return new Constant(coefficient); }
+        if (name.isEmpty() || power == 0) { return new Constant(coefficient); }
         return new Indeterminate(coefficient, name, power);
       }
 

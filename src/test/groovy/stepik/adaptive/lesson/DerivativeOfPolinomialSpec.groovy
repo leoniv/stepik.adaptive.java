@@ -142,10 +142,10 @@ class DerivativeOfPolinomialSpec extends Specification {
       }
 
       static class ParserSpec extends DerivativeOfPolinomialSpec {
-        def "#parse"() {
+        @Unroll
+        def "parse of #input"() {
           given:
-            def parser = DerivativeOfPolinomial.Polinomial
-                           .Member.Parser.new(input)
+            def parser = new DerivativeOfPolinomial.Polinomial.Member.Parser(input)
 
           when:
             def member = parser.parse()
