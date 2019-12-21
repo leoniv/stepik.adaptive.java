@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ class  DerivativeOfPolinomial {
   static class Polinomial {
     List<Member> members = new ArrayList<>();
     static final String SPLITER = "(?<!\\^)(?=-|\\+)";
+    static final Member ZERO = new Member.Constant(0);
 
     protected Polinomial(List<Member> members) {
       this.members = members;
@@ -48,13 +50,37 @@ class  DerivativeOfPolinomial {
                   );
     }
 
+    public Polinomial reduce() {
+      return new Polinomial(reduceInner());
+    }
+
+    private List<Member> reduceInner() {
+      return memberSignarures()
+        .map(s -> sumFor(s))
+        .filter(x -> !x.isZero())
+        .collect(Collectors.toList());
+    }
+
+    public Member sumFor(String memberSignature) {
+      return members.stream()
+        .filter(m -> memberSignature.equals(m.signature()))
+        .reduce(ZERO, (acc, m) -> acc.sum(m));
+    }
+
+    private Stream<String> memberSignarures() {
+      return members
+        .stream()
+        .map(Member::signature)
+        .distinct();
+    }
+
     static class ParseError extends RuntimeException {
       public ParseError(String message) {
         super(message);
       }
     }
 
-    static abstract class Member {
+    static abstract class Member implements Cloneable {
       final Integer power;
       final String name;
       final Integer coefficient;
@@ -102,7 +128,9 @@ class  DerivativeOfPolinomial {
       }
 
       public static Member newMember(Integer coefficient,String name, Integer power) {
-        if (name.isEmpty() || power == 0) { return new Constant(coefficient); }
+        if (name.isEmpty() || power == 0 || coefficient == 0) {
+          return new Constant(coefficient);
+        }
         return new Indeterminate(coefficient, name, power);
       }
 
@@ -122,7 +150,14 @@ class  DerivativeOfPolinomial {
 
       public abstract Member derivative();
 
+      @Override
+      public Member clone() {
+        return newMember(coefficient, name, power);
+      }
+
       public Member sum(Member other) {
+        if (isZero()) { return other.clone(); }
+        if (other.isZero()) { return this.clone(); }
         validate(other);
         return sumInner(other);
       }
@@ -162,12 +197,7 @@ class  DerivativeOfPolinomial {
 
         @Override
         protected Member sumInner(Member other) {
-          if (coefficient + other.coefficient == 0) {
-            return new Constant(0);
-          }
-          return new Indeterminate(
-              coefficient + other.coefficient, name, power
-              );
+          return newMember(coefficient + other.coefficient, name, power);
         }
       }
 

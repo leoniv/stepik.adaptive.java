@@ -44,12 +44,12 @@ class DerivativeOfPolinomialSpec extends Specification {
         def p = DerivativeOfPolinomial.Polinomial.parse(input)
 
       expect:
-        assert p.reduce() == output
+        assert p.reduce().toString() == output
 
       where:
         input                           | output
         "-3*x^2 + x^2"                  | "-2*x^2"
-        "x^2 + x^2 - 3*x - 3*x + 3 - 5" | "2*x2 - 6*x - 2"
+        "x^2 + x^2 - 3*x - 3*x + 3 - 5" | "2*x^2-6*x-2"
     }
   }
 
@@ -119,6 +119,12 @@ class DerivativeOfPolinomialSpec extends Specification {
          2    | -3    | 2   | -1   |  "-x^2"
          -2   | 5     | 0   | 3    |  "3"
          -2   | 2     | 0   | 0    |  "0"
+    }
+
+    def "#sum with zero"(){
+      expect:
+        assert member(0, "x", 1).sum(member(1, "y", 2)).toString() == "y^2"
+        assert member(1, "x", 2).sum(member(0, "y", 2)).toString() == "x^2"
     }
 
     def "#sum must fail"() {
