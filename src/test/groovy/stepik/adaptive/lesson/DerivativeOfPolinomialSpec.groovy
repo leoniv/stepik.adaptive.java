@@ -4,7 +4,12 @@ import spock.lang.*
 
 class DerivativeOfPolinomialSpec extends Specification {
   static class PolinomialSpec extends DerivativeOfPolinomialSpec {
-    def ".parse"() {
+    def member(coef, name, pow) {
+      DerivativeOfPolinomial.Polinomial.Member.newMember(coef, name, pow)
+    }
+
+    @Unroll
+    def ".parse of #input"() {
       when:
         def p = DerivativeOfPolinomial.Polinomial.parse(input)
 
@@ -12,13 +17,13 @@ class DerivativeOfPolinomialSpec extends Specification {
         assert p.members.size() == membersSize
 
       and:
-        assert p.toString() == out
+        assert p.toString() == output
 
       where:
         input                  | output         | membersSize
-        "2*X^2 - 3*x+2"        | "2*x^2-3*x+2"   | 3
+        "2*X^2 - 3*x+2"        | "2*x^2-3*x+2"  | 3
         "-2*X^2 + 3*x-2"       | "-2*x^2+3*x-2" | 3
-        "-3*X^2 + X^2 + 3*x-2" | "-2*x^2+3*x-2" | 3
+        "-3*X^2 + X^-2 - 3*x-2" | "-3*x^2+x^-2-3*x-2" | 4
     }
 
     def ".derivative"() {
@@ -40,10 +45,6 @@ class DerivativeOfPolinomialSpec extends Specification {
 
     static class MemberSpec extends PolinomialSpec {
 
-      def member(coef, name, pow) {
-        DerivativeOfPolinomial.Polinomial.Member.newMember(coef, name, pow)
-      }
-
       def parse(input) {
         DerivativeOfPolinomial.Polinomial.Member.parse(input)
       }
@@ -59,7 +60,7 @@ class DerivativeOfPolinomialSpec extends Specification {
 
         where:
           input    | signature | toString
-          "2*X^3"  |  "x^3"     | "2*x^2"
+          "2*X^3"  |  "x^3"     | "2*x^3"
             "2"    |  "^0"      | "2"
         }
 
@@ -142,6 +143,19 @@ class DerivativeOfPolinomialSpec extends Specification {
       }
 
       static class ParserSpec extends DerivativeOfPolinomialSpec {
+        def "parse fail ParseError"() {
+          when:
+            def parser = new DerivativeOfPolinomial.Polinomial.Member.Parser(input)
+
+          then:
+            thrown DerivativeOfPolinomial.Polinomial.ParseError
+
+          where:
+            input | _
+            "+"   | _
+            "2^3" | _
+        }
+
         @Unroll
         def "parse of #input"() {
           given:
@@ -168,7 +182,7 @@ class DerivativeOfPolinomialSpec extends Specification {
               "z^2"  | 1    | 2   | "z"
               "-x^2" | -1   | 2   | "x"
               "z^-2" | 1    | -2  | "z"
-          }
+        }
       }
     }
   }

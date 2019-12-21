@@ -1,6 +1,7 @@
 package stepik.adaptive.lesson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +18,7 @@ class  DerivativeOfPolinomial {
 
   static class Polinomial {
     List<Member> members = new ArrayList<>();
+    static final String SPLITER = "(?<!\\^)(?=-|\\+)";
 
     protected Polinomial(List<Member> members) {
       this.members = normalize(members);
@@ -28,12 +30,19 @@ class  DerivativeOfPolinomial {
     }
 
     public static Polinomial parse(String input) {
-      return new Polinomial(null);
+      String[] split = input.replaceAll("\\s+", "").split(SPLITER);
+      return new Polinomial(
+                    Arrays.stream(split)
+                      .map(Member::parse)
+                      .collect(Collectors.toList())
+                  );
     }
 
     public String toString() {
       return members.stream().map(Member::toString)
-        .collect(Collectors.joining("+"));
+        .reduce(
+            "", (acc, s) -> acc + (s.startsWith("-") || acc.isEmpty() ? "" : "+") + s
+            );
     }
 
     public Polinomial derivative() {
@@ -64,7 +73,7 @@ class  DerivativeOfPolinomial {
       static class Parser {
         final String input;
         final Matcher matcher;
-        final String EXPR = "^(-|\\+)?(\\d+)?(\\*)?([a-zA-Z]+)?(\\^(-?\\d+))?$";
+        final String EXPR = "^(-(?=\\d|[a-zA-Z])|\\+(?=\\d|[a-zA-Z]))?(\\d+)?(\\*)?([a-zA-Z]+)?((?<=[a-zA-Z])\\^(-?\\d+))?$";
 
         Parser(String input) {
           this.input = input.replaceAll("\\s+", "");
