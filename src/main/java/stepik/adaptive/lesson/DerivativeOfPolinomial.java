@@ -21,12 +21,7 @@ class  DerivativeOfPolinomial {
     static final String SPLITER = "(?<!\\^)(?=-|\\+)";
 
     protected Polinomial(List<Member> members) {
-      this.members = normalize(members);
-    }
-
-    private static List<Member> normalize(List<Member> members) {
-      return members.stream().filter(x -> ! x.isZero())
-        .collect(Collectors.toList());
+      this.members = members;
     }
 
     public static Polinomial parse(String input) {
@@ -167,6 +162,9 @@ class  DerivativeOfPolinomial {
 
         @Override
         protected Member sumInner(Member other) {
+          if (coefficient + other.coefficient == 0) {
+            return new Constant(0);
+          }
           return new Indeterminate(
               coefficient + other.coefficient, name, power
               );
