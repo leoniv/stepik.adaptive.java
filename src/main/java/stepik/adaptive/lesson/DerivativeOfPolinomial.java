@@ -2,6 +2,7 @@ package stepik.adaptive.lesson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +14,12 @@ import java.util.Optional;
 class  DerivativeOfPolinomial {
   public static void main(String[] args) {
     try (Scanner scanner = new Scanner(System.in)) {
-      System.out.println("FIXME");
+      System.out.println(Polinomial
+          .parse(scanner.nextLine())
+          .derivative()
+          .reduce()
+          .sorted((m1, m2) -> m2.signature().compareTo(m1.signature()))
+          );
     }
   }
 
@@ -52,6 +58,11 @@ class  DerivativeOfPolinomial {
 
     public Polinomial reduce() {
       return new Polinomial(reduceInner());
+    }
+
+    public Polinomial sorted(Comparator<Member> comparator) {
+      return new Polinomial(
+          members.stream().sorted(comparator).collect(Collectors.toList()));
     }
 
     private List<Member> reduceInner() {
